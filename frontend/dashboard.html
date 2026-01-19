@@ -57,10 +57,10 @@
       <table class="w-full">
         <thead>
           <tr class="border-b">
-            <th>Topic</th>
-            <th>Attempts</th>
-            <th>Correct</th>
-            <th>Accuracy</th>
+            <th class="text-left py-2">Topic</th>
+            <th class="text-left py-2">Attempts</th>
+            <th class="text-left py-2">Correct</th>
+            <th class="text-left py-2">Accuracy</th>
           </tr>
         </thead>
         <tbody id="progressTable"></tbody>
@@ -146,10 +146,10 @@
 
         table.innerHTML += `
       <tr class="border-b">
-        <td>${p.topic}</td>
-        <td>${p.attempts}</td>
-        <td>${p.correct}</td>
-        <td>${acc}%</td>
+        <td class="py-2">${p.topic}</td>
+        <td class="py-2">${p.attempts}</td>
+        <td class="py-2">${p.correct}</td>
+        <td class="py-2">${acc}%</td>
       </tr>
     `;
       });
