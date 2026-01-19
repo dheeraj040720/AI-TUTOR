@@ -98,7 +98,7 @@ def chat_endpoint(request: ChatRequest):
             return {"status": "error", "message": "API Key not set."}
 
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-flash-latest")
         
         response = model.generate_content(request.message)
         return {"status": "success", "response": response.text}
@@ -142,14 +142,14 @@ Provide a helpful, encouraging recommendation:"""
         
         genai.configure(api_key=api_key)
         
-        # Try gemini-2.0-flash first
+        # Try gemini-flash-latest
         try:
-            model = genai.GenerativeModel("gemini-2.0-flash-exp")
+            model = genai.GenerativeModel("gemini-flash-latest")
             response = model.generate_content(prompt)
             recommendation = response.text.strip()
             print(f"✅ Gemini API Success! Recommendation: {recommendation[:100]}...")
         except Exception as api_err:
-            print(f"⚠️  gemini-2.0-flash-exp failed: {str(api_err)}")
+            print(f"⚠️  gemini-flash-latest failed: {str(api_err)}")
             
             # Fallback to gemini-1.5-flash
             try:
@@ -206,7 +206,7 @@ async def generate_quiz(request: QuizRequest):
         Only return the JSON, no other text or explanation.
         """
 
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-flash-latest")
         
         print(f"Generating quiz for subject: {request.subject}")
         response = model.generate_content(prompt)
