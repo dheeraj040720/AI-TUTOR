@@ -113,6 +113,7 @@ def get_recommendation(request: RecommendationRequest):
     try:
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
+            print("ERROR: Gemini API Key not set in environment variables")
             return {"status": "error", "message": "Gemini API Key not set."}
 
         # Create a cache key based on the progress data
@@ -121,49 +122,61 @@ def get_recommendation(request: RecommendationRequest):
         cache_key = str(progress_sorted)
 
         if cache_key in recommendation_cache:
-            print("Returning cached recommendation...")
+            print("✅ Returning cached recommendation...")
             return {"status": "success", "recommendation": recommendation_cache[cache_key]}
 
         # Construct prompt for Gemini
-        marks_summary = "\n".join([f"- {item.get('topic', 'Unknown')}: {item.get('accuracy', 0)}%" for item in request.progress])
+        marks_summary = "\n".join([f"- {item.get('topic', 'Unknown')}: {item.get('accuracy', 0)}% ({item.get('correct', 0)}/{item.get('attempts', 0)} correct)" for item in request.progress])
         
-        prompt = f"You are an expert AI Study Tutor. Analyze these student result and provide a 2-3 sentence personalized recommendation. Focus on weak areas (below 60%) and be encouraging.\n\nMarks:\n{marks_summary}\n\nRecommendation:"
+        prompt = f"""You are an expert AI Study Tutor. Analyze these student results and provide a 2-3 sentence personalized recommendation. 
+Focus on weak areas (below 60%) and be encouraging and specific.
+
+Student Performance:
+{marks_summary}
+
+Provide a helpful, encouraging recommendation:"""
         
-        print(f"Calling Gemini (gemini-1.5-flash) for recommendation...")
+        print(f"📊 Student Progress Data:")
+        print(marks_summary)
+        print(f"\n🤖 Calling Gemini API for AI recommendation...")
+        
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
         
+        # Try gemini-2.0-flash first
         try:
-            print(f"Calling Gemini (gemini-2.0-flash) for recommendation...")
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            model = genai.GenerativeModel("gemini-2.0-flash-exp")
             response = model.generate_content(prompt)
             recommendation = response.text.strip()
+            print(f"✅ Gemini API Success! Recommendation: {recommendation[:100]}...")
         except Exception as api_err:
-            error_msg = f"Gemini API Error: {str(api_err)}"
-            print(error_msg)
+            print(f"⚠️  gemini-2.0-flash-exp failed: {str(api_err)}")
             
-            # Retry with gemini-flash-latest which was in the list
+            # Fallback to gemini-1.5-flash
             try:
-                print("Attempting with gemini-flash-latest fallback...")
-                model_2 = genai.GenerativeModel("gemini-flash-latest")
-                response = model_2.generate_content(prompt)
+                print("🔄 Trying fallback model: gemini-1.5-flash...")
+                model = genai.GenerativeModel("gemini-1.5-flash")
+                response = model.generate_content(prompt)
                 recommendation = response.text.strip()
+                print(f"✅ Fallback model success! Recommendation: {recommendation[:100]}...")
             except Exception as e2:
-                print(f"Final fallback to simple logic: {str(e2)}")
-                raise e2 # Let the outer catch handle it
+                print(f"❌ All Gemini models failed: {str(e2)}")
+                raise e2
 
         # Save to cache
         recommendation_cache[cache_key] = recommendation
+        print(f"💾 Cached recommendation for future requests")
 
         return {"status": "success", "recommendation": recommendation}
     except Exception as e:
-        print(f"Gemini Error: {str(e)}")
+        print(f"❌ Gemini Error: {str(e)}")
+        print(f"📝 Using fallback recommendation logic...")
         # Fallback to simple logic if API fails
         weak_topics = [item['topic'] for item in request.progress if item.get('accuracy', 0) < 60]
         if weak_topics:
-            fallback = f"Focus on improving your scores in {', '.join(weak_topics)}."
+            fallback = f"Focus on improving your scores in {', '.join(weak_topics)}. Keep practicing and you'll see improvement!"
         else:
-            fallback = "Great job! Keep maintaining your high scores across all topics."
+            fallback = "Great job! Keep maintaining your high scores across all topics. 🚀"
+        print(f"💡 Fallback recommendation: {fallback}")
         return {"status": "success", "recommendation": fallback}
 
 @app.post("/generate-quiz")

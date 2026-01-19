@@ -12,27 +12,7 @@
   ],
   "routes": [
     {
-      "src": "/chat",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/get-recommendation",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/student-progress",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/submit-answer",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/generate-quiz",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/ai-recommendation",
+      "src": "/(chat|get-recommendation|student-progress|submit-answer|generate-quiz|ai-recommendation)",
       "dest": "backend/main.py"
     },
     {
