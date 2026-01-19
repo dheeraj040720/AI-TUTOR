@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/main.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/chat",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/get-recommendation",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/student-progress",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/submit-answer",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/ai-recommendation",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1"
+    }
+  ]
+}

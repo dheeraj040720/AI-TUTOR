@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>AI Personalized Learning Tutor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+  <script>
+    // Open Access - No Auth Required
+  </script>
+
+  <header class="bg-white shadow">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between">
+      <a href="index.html" class="hover:opacity-80 transition-opacity">
+        <h1 class="text-2xl font-bold text-indigo-600">
+          AI Personalized Learning Tutor
+        </h1>
+      </a>
+      <div class="flex items-center gap-4">
+        <button onclick="showStudentList()"
+          class="text-indigo-600 font-semibold hover:bg-indigo-50 px-3 py-2 rounded transition">🔑 Guest Access</button>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="max-w-5xl mx-auto px-6 py-20 text-center">
+    <h2 class="text-4xl font-bold mb-6 text-gray-800">Welcome to AI Learning Tutor</h2>
+    <p class="text-xl text-gray-600 mb-12">Track your progress and get personalized AI recommendations.</p>
+
+    <div class="flex flex-col md:flex-row justify-center gap-8">
+      <a href="dashboard.html"
+        class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gray-100 flex-1 max-w-sm">
+        <div class="text-4xl mb-4">📊</div>
+        <h3 class="text-2xl font-bold text-indigo-600 mb-2">View Student Marks</h3>
+        <p class="text-gray-500">Check your progress, accuracy, and AI insights.</p>
+      </a>
+
+      <a href="add_marks.html"
+        class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gray-100 flex-1 max-w-sm">
+        <div class="text-4xl mb-4">✍️</div>
+        <h3 class="text-2xl font-bold text-green-600 mb-2">Add Marks</h3>
+        <p class="text-gray-500">Submit new test scores and update your profile.</p>
+      </a>
+
+      <button onclick="showStudentList()"
+        class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gray-100 flex-1 max-w-sm cursor-pointer">
+        <div class="text-4xl mb-4">🔑</div>
+        <h3 class="text-2xl font-bold text-purple-600 mb-2">Guest Access</h3>
+        <p class="text-gray-500">View all student IDs for testing and demos.</p>
+      </button>
+
+      <a href="quiz.html"
+        class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-2 border-indigo-50 flex-1 max-w-sm">
+        <div class="text-4xl mb-4 group-hover:animate-bounce">🧠</div>
+        <h3 class="text-2xl font-bold text-indigo-600 mb-2">AI Quiz</h3>
+        <p class="text-gray-500">Generate a custom quiz on any topic and test your knowledge!</p>
+      </a>
+    </div>
+
+    <!-- Mental Health Section - Moved Down -->
+    <div class="mt-12 flex justify-center">
+      <a href="mental_health.html"
+        class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-2 border-indigo-100 w-full max-w-2xl flex items-center gap-6 text-left">
+        <div class="text-5xl">🌱</div>
+        <div>
+          <h3 class="text-2xl font-bold text-indigo-600 mb-1">Mental Health & Well-being</h3>
+          <p class="text-gray-600">Discover resources, strategies, and AI tools to support your journey.</p>
+        </div>
+      </a>
+    </div>
+  </main>
+
+
+  <!-- GUEST STUDENT LIST MODAL -->
+  <div id="studentListModal"
+    class="hidden fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-2xl w-full">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-indigo-600">Guest Access - Student IDs</h2>
+        <button onclick="closeStudentList()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+      </div>
+      <p class="text-gray-600 mb-4">Click on any UUID to copy it, then use it on the Dashboard or Add Marks pages.</p>
+
+      <div id="studentListContainer" class="space-y-2 max-h-96 overflow-y-auto">
+        <p class="text-center text-gray-400">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4"></script>
+  <script src="config.js"></script>
+  <script>
+    const supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+
+    async function showStudentList() {
+      const modal = document.getElementById('studentListModal');
+      const container = document.getElementById('studentListContainer');
+
+      modal.classList.remove('hidden');
+      container.innerHTML = '<p class="text-center text-gray-400">Loading...</p>';
+
+      try {
+        const { data: students, error } = await supabase
+          .from('students')
+          .select('id, name')
+          .order('name');
+
+        if (error) throw error;
+
+        if (!students || students.length === 0) {
+          container.innerHTML = '<p class="text-center text-gray-500">No students found.</p>';
+          return;
+        }
+
+        container.innerHTML = students.map(s => `
+          <div class="border rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer" onclick="copyUUID('${s.id}')">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-bold text-gray-800">${s.name || 'Unknown'}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-gray-400 mb-1">Click to copy UUID</p>
+                <p class="font-mono text-sm text-indigo-600">${s.id}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = `<p class="text-center text-red-500">Error: ${err.message}</p>`;
+        console.error(err);
+      }
+    }
+
+    function closeStudentList() {
+      document.getElementById('studentListModal').classList.add('hidden');
+    }
+
+    function copyUUID(uuid) {
+      navigator.clipboard.writeText(uuid).then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'UUID Copied!',
+          text: uuid,
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }).catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Copy Failed',
+          text: 'UUID: ' + uuid,
+          confirmButtonColor: '#6366f1'
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

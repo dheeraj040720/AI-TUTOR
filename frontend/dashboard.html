@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Progress Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4"></script>
+  <script src="config.js"></script>
+  <script>
+    const supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+  </script>
+
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="hover:opacity-80 transition-opacity">
+        <h1 class="text-2xl font-bold text-indigo-600">Student Dashboard</h1>
+      </a>
+      <nav class="flex gap-4 items-center">
+        <a href="https://chatgpt.com/" target="_blank"
+          class="text-indigo-600 font-semibold hover:bg-indigo-50 px-3 py-2 rounded transition">Ask
+          AI</a>
+        <a href="index.html" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded transition">Back to
+          Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-10">
+
+    <!-- SUMMARY -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow">
+        <p class="text-gray-500">Total Topics</p>
+        <p id="totalTopics" class="text-3xl font-bold">0</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow">
+        <p class="text-gray-500">Completed</p>
+        <p id="completed" class="text-3xl font-bold text-green-600">0</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow">
+        <p class="text-gray-500">Accuracy</p>
+        <p id="accuracy" class="text-3xl font-bold text-orange-500">0%</p>
+      </div>
+    </section>
+
+    <!-- TABLE -->
+    <section class="bg-white rounded-xl shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Topic-wise Progress</h2>
+      <table class="w-full">
+        <thead>
+          <tr class="border-b">
+            <th>Topic</th>
+            <th>Attempts</th>
+            <th>Correct</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody id="progressTable"></tbody>
+      </table>
+    </section>
+
+    <!-- AI -->
+    <section class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl p-6">
+      <h2 class="text-xl font-bold mb-2">🤖 AI Recommendation</h2>
+      <p id="aiText"></p>
+    </section>
+
+    <!-- SUBMIT -->
+    <!-- SUBMIT Removed -->
+
+  </main>
+
+  <!-- ID ENTRY MODAL -->
+  <div id="idModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full text-center relative">
+      <!-- Close Button -->
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <h2 class="text-2xl font-bold mb-2">Welcome Student</h2>
+      <p class="text-gray-500 mb-6">Enter your Student ID to view your progress.</p>
+
+      <input id="studentIdInput" class="w-full border p-3 rounded mb-4 text-center font-mono"
+        placeholder="Paste UUID here..." />
+      <button onclick="setStudentId()"
+        class="w-full bg-indigo-600 text-white py-3 rounded font-bold hover:bg-indigo-700 transition">
+        Load Dashboard
+      </button>
+      <p class="mt-4 text-xs text-gray-400">Demo ID: 4d564dd9-9cb5-4ce6-9e88-383f2ac17d30</p>
+    </div>
+  </div>
+
+  <script>
+    let STUDENT_ID = null;
+
+    function closeModal() {
+      document.getElementById("idModal").classList.add("hidden");
+    }
+
+    /* 🔑 LOAD DASHBOARD */
+    /* 🔑 LOAD DASHBOARD */
+    async function loadDashboard() {
+      // Check if ID is manually provided
+      if (!STUDENT_ID) {
+        document.getElementById("idModal").classList.remove("hidden");
+        return;
+      }
+
+      console.log("Loading data for:", STUDENT_ID);
+
+      const { data: progress } = await supabase
+        .from("progress")
+        .select("*")
+        .eq("student_id", STUDENT_ID);
+
+      const table = document.getElementById("progressTable");
+      table.innerHTML = "";
+
+      let completed = 0;
+      let totalAccuracy = 0;
+
+      if (!progress || progress.length === 0) {
+        // No data yet
+        document.getElementById("totalTopics").innerText = "0";
+        document.getElementById("completed").innerText = "0";
+        document.getElementById("accuracy").innerText = "0%";
+        document.getElementById("aiText").innerText = "Welcome! Start adding marks to see AI recommendations.";
+        return;
+      }
+
+      progress.forEach(p => {
+        const acc = Math.round((p.correct / p.attempts) * 100);
+        if (acc >= 60) completed++;
+        totalAccuracy += acc;
+
+        table.innerHTML += `
+      <tr class="border-b">
+        <td>${p.topic}</td>
+        <td>${p.attempts}</td>
+        <td>${p.correct}</td>
+        <td>${acc}%</td>
+      </tr>
+    `;
+      });
+
+      document.getElementById("totalTopics").innerText = progress.length;
+      document.getElementById("completed").innerText = completed;
+      document.getElementById("accuracy").innerText =
+        progress.length ? Math.round(totalAccuracy / progress.length) + "%" : "0%";
+
+      // Get AI recommendation from Gemini
+      await getAIRecommendation(progress);
+    }
+
+    async function getAIRecommendation(progressData) {
+      const aiTextElement = document.getElementById("aiText");
+      aiTextElement.innerText = "🤖 Requesting Relay recommendation...";
+
+      try {
+        const progressPayload = progressData.map(p => ({
+          topic: p.topic,
+          accuracy: Math.round((p.correct / p.attempts) * 100),
+          attempts: p.attempts,
+          correct: p.correct
+        }));
+
+        const response = await fetch("http://127.0.0.1:8000/get-recommendation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ progress: progressPayload })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success" || data.status === "processing") {
+          aiTextElement.innerText = data.recommendation;
+        } else {
+          fallbackRecommendation(progressData);
+        }
+      } catch (error) {
+        console.error("AI Recommendation Error:", error);
+        fallbackRecommendation(progressData);
+      }
+
+      function fallbackRecommendation(data) {
+        const weakTopic = data.find(p => (p.correct / p.attempts) * 100 < 60);
+        aiTextElement.innerText = weakTopic
+          ? `Practice more on ${weakTopic.topic}`
+          : "Excellent progress 🚀";
+      }
+    }
+
+    function setStudentId() {
+      const input = document.getElementById("studentIdInput").value.trim();
+      if (!input) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ID Required',
+          text: 'Please enter a valid Student ID',
+          confirmButtonColor: '#6366f1'
+        });
+        return;
+      }
+
+      STUDENT_ID = input;
+      document.getElementById("idModal").classList.add("hidden");
+      loadDashboard();
+    }
+
+
+
+
+
+    loadDashboard();
+  </script>
+
+</body>
+
+</html>

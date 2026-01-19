@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Mental Health Resources</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .details {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .card-hover:hover .details {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen">
+
+    <header
+        class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm transition-all duration-300 hover:shadow-md">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="hover:opacity-80 transition-opacity">
+                <h1 class="text-xl font-bold text-indigo-600">AI Learning Tutor</h1>
+            </a>
+            <nav>
+                <a href="index.html"
+                    class="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-300 flex items-center gap-1 group">
+                    <span class="group-hover:-translate-x-1 transition-transform duration-300">&larr;</span> Back to
+                    Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-16 float">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">Your Well-being Matters</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Mental health is foundational to your development. Understanding and managing your emotional health is
+                just as important as your academic studies.
+            </p>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- Importance -->
+            <div
+                class="bg-white p-8 rounded-2xl shadow-sm border border-transparent hover:border-indigo-100 transition-all duration-300 card-hover group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 origin-left">🌱</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Why it Matters</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Mental health influences how you think, feel, and manage the transition to adulthood.
+                </p>
+                <div class="details text-sm text-gray-500 border-t pt-4">
+                    Research shows that positive mental health is linked to higher GPA, better concentration, and
+                    increased motivation. It helps in building resilience for future career challenges.
+                </div>
+            </div>
+
+            <!-- Challenges -->
+            <div
+                class="bg-white p-8 rounded-2xl shadow-sm border border-transparent hover:border-red-100 transition-all duration-300 card-hover group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 origin-left">⚡</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Common Challenges</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Burnout, anxiety, and depression can hinder focus and motivation.
+                </p>
+                <div class="details text-sm text-gray-500 border-t pt-4">
+                    Signs include social withdrawal, sleep disturbances, and extreme exhaustion. Early identification is
+                    key to preventing academic decline and absenteeism.
+                </div>
+            </div>
+
+            <!-- Strategies -->
+            <div
+                class="bg-white p-8 rounded-2xl shadow-sm border border-transparent hover:border-green-100 transition-all duration-300 card-hover group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 origin-left">🤝</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Support Strategies</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Connecting with friends, engaging in physical activity, and university workshops.
+                </p>
+                <div class="details text-sm text-gray-500 border-t pt-4">
+                    Try active listening with friends, join campus wellness groups, or practice mindfulness. Even 15
+                    minutes of physical activity can significantly reduce cortisol levels.
+                </div>
+            </div>
+
+            <!-- Digital Tools -->
+            <div
+                class="bg-white p-8 rounded-2xl shadow-sm border-2 border-indigo-50 hover:border-indigo-200 transition-all duration-300 card-hover group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 origin-left">🤖</div>
+                <h3 class="text-xl font-bold text-indigo-600 mb-3">24/7 Digital Support</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    AI-powered tools like Woebot and Wysa offer anonymous support anytime.
+                </p>
+                <div class="details text-sm text-gray-500 border-t pt-4">
+                    These tools use evidence-based interventions like CBT. They are available 24/7, reducing the stigma
+                    associated with seeking immediate mental health care.
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div
+            class="relative bg-indigo-600 rounded-3xl p-10 text-center text-white shadow-xl shadow-indigo-200 overflow-hidden group">
+            <div class="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors duration-500"></div>
+            <div class="relative z-10">
+                <h3 class="text-2xl font-bold mb-4">You're Not Alone</h3>
+                <p class="mb-8 opacity-90 max-w-xl mx-auto">
+                    Seeking help is a sign of strength. Whether it's through a friend, a professional, or a digital
+                    tool,
+                    support is always available.
+                </p>
+                <a href="https://chatgpt.com/" target="_blank"
+                    class="inline-block bg-white text-indigo-600 px-8 py-3 rounded-full font-bold hover:bg-gray-50 transform hover:scale-105 hover:rotate-1 active:scale-95 transition-all duration-300 shadow-lg">
+                    Talk to AI Now
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-gray-200">
+        <div class="max-w-5xl mx-auto px-6 text-center text-gray-500 text-sm">
+            &copy; 2026 AI Learning Tutor. Designed for student well-being.
+        </div>
+    </footer>
+
+</body>
+
+</html>
