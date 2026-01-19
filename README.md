@@ -24,8 +24,8 @@ An intelligent, personalized learning platform powered by Google's Gemini AI. Tr
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/AILearningTutor.git
-   cd AILearningTutor
+   git clone https://github.com/dheeraj040720/AI-TUTOR.git
+   cd AI-TUTOR
    ```
 
 2. **Set up environment variables**
