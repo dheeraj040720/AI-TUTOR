@@ -149,6 +149,23 @@
                 return;
             }
 
+            // Validate logic: Correct cannot be > Attempts
+            for (const row of rows) {
+                const subjectName = row.querySelector(".topic-name").value.trim();
+                const attempts = parseInt(row.querySelector(".topic-attempts").value);
+                const correct = parseInt(row.querySelector(".topic-correct").value);
+
+                if (correct > attempts) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Entry',
+                        text: `For ${subjectName}, correct answers (${correct}) cannot exceed attempts (${attempts})!`,
+                        confirmButtonColor: '#ef4444'
+                    });
+                    return;
+                }
+            }
+
             responseMsg.textContent = "Processing...";
             responseMsg.className = "text-center font-bold mt-4 text-indigo-600";
 
