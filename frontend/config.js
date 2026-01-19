@@ -8,7 +8,8 @@ const CONFIG = {
     API_BASE_URL: 'http://localhost:8000'
 };
 
-// For production, you can override these values
+// For production (Vercel), use relative URLs since frontend and backend are on the same domain
 if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    CONFIG.API_BASE_URL = 'https://your-production-api.vercel.app';
+    // Use empty string for same-origin requests on Vercel
+    CONFIG.API_BASE_URL = '';
 }

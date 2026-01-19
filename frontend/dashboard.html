@@ -175,7 +175,7 @@
           correct: p.correct
         }));
 
-        const response = await fetch("http://127.0.0.1:8000/get-recommendation", {
+        const response = await fetch(`${CONFIG.API_BASE_URL}/get-recommendation`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ progress: progressPayload })
