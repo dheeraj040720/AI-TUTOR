@@ -28,6 +28,10 @@
       "dest": "backend/main.py"
     },
     {
+      "src": "/generate-quiz",
+      "dest": "backend/main.py"
+    },
+    {
       "src": "/ai-recommendation",
       "dest": "backend/main.py"
     },
