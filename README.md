@@ -1,6 +1,17 @@
 # AI Learning Tutor 🎓
 
-An intelligent, personalized learning platform powered by Google's Gemini AI. Track student progress, generate custom quizzes, and receive AI-driven recommendations to enhance learning outcomes.
+AI Learning Tutor is a full-stack, AI-powered EdTech platform developed as part of the IBM SkillsBuild Applied AI Internship (hosted by CSRBOX®). The platform leverages Google Gemini AI to deliver personalized learning experiences by generating dynamic quizzes, analyzing student performance, and providing intelligent, data-driven study recommendations.
+
+Beyond academic analytics, the platform includes an informative mental health awareness module, emphasizing the importance of student well-being alongside performance. Designed with a clean, scalable architecture, AI Learning Tutor demonstrates practical AI integration, secure API usage, and end-to-end full-stack development.
+
+
+
+
+
+
+https://github.com/user-attachments/assets/1e803b71-47d8-48ce-8267-e1b72a722cce
+
+
 
 ## ✨ Features
 
@@ -10,47 +21,6 @@ An intelligent, personalized learning platform powered by Google's Gemini AI. Tr
 - **✍️ Progress Tracking** - Submit and monitor quiz results over time
 - **🌱 Mental Health Support** - Resources and tools for student well-being
 - **🔑 Guest Access** - Easy demo mode for exploring the platform
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.8+
-- Node.js (optional, for development)
-- Gemini API Key ([Get one here](https://makersuite.google.com/app/apikey))
-- Supabase Account ([Sign up here](https://supabase.com))
-
-
-
-## 📁 Project Structure
-
-```
-AILearningTutor/
-├── backend/
-│   ├── main.py              # FastAPI application with all endpoints
-│   ├── supabase_client.py   # Supabase database connection
-│   └── list_models.py       # Utility to list available Gemini models
-├── frontend/
-│   ├── index.html           # Landing page
-│   ├── dashboard.html       # Student progress dashboard
-│   ├── add_marks.html       # Submit quiz results
-│   ├── quiz.html            # AI quiz generator
-│   ├── mental_health.html   # Mental health resources
-│   ├── config.js            # Frontend configuration
-│   └── style.css            # Styles
-├── .env                     # Environment variables (not in git)
-├── .env.example             # Example environment file
-├── .gitignore               # Git ignore rules
-├── requirements.txt         # Python dependencies
-├── SECURITY.md              # Security documentation
-└── README.md                # This file
-```
-
-## 🔐 Security
-
-This project uses environment variables to protect sensitive API keys. See [SECURITY.md](SECURITY.md) for detailed security information and best practices.
-
-**Important:** Never commit your `.env` file to version control!
 
 ## 🛠️ Technology Stack
 
@@ -74,32 +44,6 @@ This project uses environment variables to protect sensitive API keys. See [SECU
 - `POST /get-recommendation` - Get AI study recommendations
 - `POST /generate-quiz` - Generate a custom quiz on any topic
 
-## 🌐 Deployment
-
-### Vercel (Recommended)
-
-1. Install Vercel CLI:
-   ```bash
-   npm i -g vercel
-   ```
-
-2. Deploy:
-   ```bash
-   vercel
-   ```
-
-3. Add environment variables in Vercel dashboard:
-   - `GEMINI_API_KEY`
-   - `SUPABASE_URL`
-   - `SUPABASE_ANON_KEY`
-
-### Other Platforms
-
-The project can be deployed to any platform that supports Python and static file hosting:
-- Heroku
-- Railway
-- Render
-- AWS/Google Cloud/Azure
 
 ## 🤝 Contributing
 
